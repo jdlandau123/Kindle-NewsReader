@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsScaper", "NewsScaper\NewsScaper.csproj", "{2A9D8A4A-9129-40D7-8541-335945F78F36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsScraper", "NewsScraper\NewsScraper.csproj", "{2A9D8A4A-9129-40D7-8541-335945F78F36}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScraperLib", "ScraperLib\ScraperLib.csproj", "{D5D54702-1C74-417B-848F-054A5C66D1F5}"
 EndProject

@@ -48,8 +48,12 @@ public class CnnScraper : BaseScraper, IScraper
             Category = category,
             UpdatedDate = date,
             Link = url,
-            Body = String.Join(" ", paragraphs).Replace('\u00A0', ' ')
+            Body = String.Join(" ", paragraphs).Replace('\u00A0', ' '),
+            Source = "CNN"
         };
-        Articles.Add(article);
+        if (article.IsValid())
+        {
+            Articles.Add(article);
+        }
     }
 }

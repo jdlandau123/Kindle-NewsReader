@@ -44,8 +44,12 @@ public class NewYorkTimesScraper : BaseScraper, IScraper
             Category = category,
             UpdatedDate = date,
             Link = url,
-            Body = String.Join(" ", paragraphs)
+            Body = String.Join(" ", paragraphs),
+            Source = "New York Times"
         };
-        Articles.Add(article);
+        if (article.IsValid())
+        {
+            Articles.Add(article);
+        }
     }
 }

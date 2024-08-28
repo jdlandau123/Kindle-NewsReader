@@ -41,8 +41,12 @@ public class AssociatedPressScraper : BaseScraper, IScraper
             Category = category,
             UpdatedDate = date,
             Link = url,
-            Body = String.Join(" ", paragraphs)
+            Body = String.Join(" ", paragraphs),
+            Source = "Associated Press"
         };
-        Articles.Add(article);
+        if (article.IsValid())
+        {
+            Articles.Add(article);
+        }
     }
 }
