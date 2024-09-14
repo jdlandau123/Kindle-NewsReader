@@ -1,4 +1,4 @@
-﻿namespace ScraperLib;
+namespace NewsScraper;
 
 public class Article
 {
@@ -7,7 +7,6 @@ public class Article
     public string Category { get; set; } = string.Empty;
     public string Link { get; set; } = string.Empty;
     public DateTime UpdatedDate { get; set; } = DateTime.Today;
-    public string Source { get; set; } = string.Empty;
 
     public bool IsValid()
     {
@@ -16,7 +15,6 @@ public class Article
             Title,
             Body,
             Link,
-            Source,
             UpdatedDate.ToString("yyyy-MM-dd"),
         ];
         return !requiredProperties.Any(p => string.IsNullOrWhiteSpace(p));

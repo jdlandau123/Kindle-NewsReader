@@ -1,12 +1,19 @@
-﻿using AngleSharp.Dom;
+using AngleSharp.Dom;
 using AngleSharp;
 
-namespace ScraperLib;
+namespace NewsScraper;
 
-public class AssociatedPressScraper : BaseScraper, IScraper
+public class Scraper
 {
-    private string _urlRoot = "https://apnews.com";
+    public List<Article> Articles { get; } = new();
+    
+    private readonly string _urlRoot = "https://apnews.com";
 
+    private IBrowsingContext _browsingContext { get; } =
+        BrowsingContext.New(Configuration.Default.WithDefaultLoader());
+
+    private readonly int _maxArticles = 50;
+    
     public async Task<List<string>> GetArticleLinks()
     {
         List<string> articleLinks = new();
@@ -41,12 +48,18 @@ public class AssociatedPressScraper : BaseScraper, IScraper
             Category = category,
             UpdatedDate = date,
             Link = url,
-            Body = String.Join(" ", paragraphs),
-            Source = "Associated Press"
+            Body = String.Join(" ", paragraphs)
         };
         if (article.IsValid())
         {
             Articles.Add(article);
         }
+    }
+
+    public DateTime TimestampToDateTime(string timestamp)
+    {
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(Convert.ToDouble(timestamp) / 1000).ToLocalTime();
+        return dateTime;
     }
 }
