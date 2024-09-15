@@ -16,5 +16,9 @@ public class User
     [Required]
     public byte[] PasswordSalt { get; set; }
 
-    [EmailAddress] public string KindleEmail { get; set; } = string.Empty;
+    [Required]
+    public Settings Settings { get; set; }
+    
+    [Required]
+    public int SettingsId { get; set; }
 }

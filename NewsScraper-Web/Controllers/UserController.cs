@@ -74,13 +74,18 @@ namespace NewsScraper_Web.Controllers
             }
 
             var (hash, salt) = _passwordService.HashPassword(userRegister.Password);
+            Settings settings = new Settings();
             
             User user = new User
             {
                 Username = userRegister.Username,
                 PasswordHash = hash,
-                PasswordSalt = salt
+                PasswordSalt = salt,
+                Settings = settings,
+                SettingsId = settings.Id
             };
+
+            await _userService.Login(user);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
@@ -108,17 +113,19 @@ namespace NewsScraper_Web.Controllers
                 return Unauthorized("Username or password is incorrect");
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties();
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity), authProperties);
+            // var claims = new List<Claim>
+            // {
+            //     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //     new Claim(ClaimTypes.Name, user.Username)
+            // };
+            //
+            // var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            // var authProperties = new AuthenticationProperties();
+            //
+            // await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            //     new ClaimsPrincipal(claimsIdentity), authProperties);
+            
+            await _userService.Login(user);
             
             // TODO: Send to settings page here
             return RedirectToAction("Index", "Home");

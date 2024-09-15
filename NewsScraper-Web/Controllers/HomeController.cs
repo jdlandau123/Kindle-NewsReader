@@ -16,10 +16,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (_userService.IsLoggedIn())
-        {
-            _userService.LogUser();
-        }
+        bool isLoggedIn = _userService.IsLoggedIn();
+        ViewData["IsLoggedIn"] = isLoggedIn;
         return View();
     }
 
