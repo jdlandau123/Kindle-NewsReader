@@ -1,20 +1,25 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NewsScraper_Web.Models;
+using NewsScraper_Web.Services;
 
 namespace NewsScraper_Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly UserService _userService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(UserService userService)
     {
-        _logger = logger;
+        _userService = userService;
     }
 
     public IActionResult Index()
     {
+        if (_userService.IsLoggedIn())
+        {
+            _userService.LogUser();
+        }
         return View();
     }
 
