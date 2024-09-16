@@ -41,7 +41,9 @@ namespace NewsScraper_Web.Controllers
 
             int userId = _userService.GetLoggedInUserId();
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users
+                .Include(u => u.Settings)
+                .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 Console.WriteLine("User Not Found");
@@ -50,8 +52,30 @@ namespace NewsScraper_Web.Controllers
 
             return View(user);
         }
-        
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Detail(
+            [Bind("Id,KindleEmail,IncludeWorld,IncludeUs,IncludePolitics,IncludeBusiness,IncludeSports,IncludeEntertainment,IncludeScience")] Settings settings)
+        {
+            Settings s = _context.Settings.FirstOrDefault(s => s.Id == settings.Id);
+            if (s == null)
+            {
+                return BadRequest();
+            }
+            s.KindleEmail = settings.KindleEmail;
+            s.IncludeWorld = settings.IncludeWorld;
+            s.IncludeUs = settings.IncludeUs;
+            s.IncludePolitics = settings.IncludePolitics;
+            s.IncludeBusiness = settings.IncludeBusiness;
+            s.IncludeSports = settings.IncludeSports;
+            s.IncludeEntertainment = settings.IncludeEntertainment;
+            s.IncludeScience = settings.IncludeScience;
+            await _context.SaveChangesAsync();
+            TempData["Message"] = "Changes Saved!";
+            return RedirectToAction("Detail", "User");
+        }
+        
         // GET: User/Register
         public IActionResult Register()
         {
@@ -74,15 +98,13 @@ namespace NewsScraper_Web.Controllers
             }
 
             var (hash, salt) = _passwordService.HashPassword(userRegister.Password);
-            Settings settings = new Settings();
             
             User user = new User
             {
                 Username = userRegister.Username,
                 PasswordHash = hash,
                 PasswordSalt = salt,
-                Settings = settings,
-                SettingsId = settings.Id
+                Settings = new Settings()
             };
 
             await _userService.Login(user);
@@ -112,23 +134,9 @@ namespace NewsScraper_Web.Controllers
             {
                 return Unauthorized("Username or password is incorrect");
             }
-
-            // var claims = new List<Claim>
-            // {
-            //     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //     new Claim(ClaimTypes.Name, user.Username)
-            // };
-            //
-            // var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            // var authProperties = new AuthenticationProperties();
-            //
-            // await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-            //     new ClaimsPrincipal(claimsIdentity), authProperties);
             
             await _userService.Login(user);
-            
-            // TODO: Send to settings page here
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Detail", "User");
         }
         
         public async Task<IActionResult> Logout()
@@ -137,57 +145,6 @@ namespace NewsScraper_Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         
-
-        // GET: User/Edit/5
-        // public async Task<IActionResult> Edit(int? id)
-        // {
-        //     if (id == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var user = await _context.Users.FindAsync(id);
-        //     if (user == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return View(user);
-        // }
-
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> Edit(int id, [Bind("Id,Username,PasswordHash,PasswordSalt,KindleEmail")] User user)
-        // {
-        //     if (id != user.Id)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     if (ModelState.IsValid)
-        //     {
-        //         try
-        //         {
-        //             _context.Update(user);
-        //             await _context.SaveChangesAsync();
-        //         }
-        //         catch (DbUpdateConcurrencyException)
-        //         {
-        //             if (!UserExists(user.Id))
-        //             {
-        //                 return NotFound();
-        //             }
-        //             else
-        //             {
-        //                 throw;
-        //             }
-        //         }
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     return View(user);
-        // }
 
         // GET: User/Delete
         public async Task<IActionResult> Delete()

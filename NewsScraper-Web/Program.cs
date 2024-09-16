@@ -19,26 +19,20 @@ public class Program
             {
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.SlidingExpiration = true;
-                // options.LoginPath = "/api/Account/login";
-                // options.LogoutPath = "/api/Account/logout";
-                // options.AccessDeniedPath = "/api/Account/access-denied";
-                // options.Events.OnRedirectToAccessDenied = context =>
-                // {
-                //     context.Response.ContentType = "application/json";
-                //     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                //     return context.Response.WriteAsync("{\"message\": \"Access denied.\"}");
-                // };
-                // options.Events.OnRedirectToLogin = context =>
-                // {
-                //     context.Response.ContentType = "application/json";
-                //     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                //     return context.Response.WriteAsync("{\"message\": \"Unauthorized access.\"}");
-                // };
             });
 
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddHttpContextAccessor();
+        
+        builder.Services.AddDistributedMemoryCache();
+
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromSeconds(10);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
@@ -60,6 +54,8 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+        
+        app.UseSession();
 
         app.MapControllerRoute(
             name: "default",

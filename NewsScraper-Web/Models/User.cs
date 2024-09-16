@@ -15,10 +15,6 @@ public class User
     
     [Required]
     public byte[] PasswordSalt { get; set; }
-
-    [Required]
-    public Settings Settings { get; set; }
     
-    [Required]
-    public int SettingsId { get; set; }
+    public virtual Settings Settings { get; set; }
 }

@@ -6,29 +6,63 @@
 }
 
 <div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordSalt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordSalt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <div class="d-flex justify-content-between align-items-center">
+        <h4>@Html.DisplayFor(model => model.Username)</h4>
+        <button class="btn btn-secondary">
+            <a class="text-white text-decoration-none" asp-controller="User" asp-action="Logout">Logout</a>
+        </button>
+    </div>
+    <hr/>
+    <p class="text-primary">@TempData["Message"]</p>
+    <form asp-action="Detail">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Settings.Id" />
+        <div class="form-group w-50">
+            <label asp-for="Settings.KindleEmail" class="control-label">Kindle Email Address</label>
+            <input asp-for="Settings.KindleEmail" class="form-control" />
+            <span asp-validation-for="Settings.KindleEmail" class="text-danger"></span>
+        </div>
+        <p class="fw-bold mt-2">Select News Categories</p>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeWorld" /> World
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeUs" /> US
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludePolitics" /> Politics
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeBusiness" /> Business
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeSports" /> Sports
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeEntertainment" /> Entertainment
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Settings.IncludeScience" /> Science
+            </label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary mt-2" />
+        </div>
+    </form>
+    <div class="mt-5">
+        <a asp-controller="User" asp-action="Delete" class="text-danger">Delete Account</a>
+    </div>
 </div>
