@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
     bool isLoggedIn = (bool)ViewData["IsLoggedIn"];
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">A Custom Newspaper Delivered To Your Kindle Every Morning</h1>
     @if (!isLoggedIn)
     {
         <div class="d-flex gap-2 justify-content-center">
@@ -16,5 +16,8 @@
             </button>
         </div>
     }
+    <p class="mt-5">
+        Kindle NewsReader is completely free to use and no personal information is required to sign up
+    </p>
     <p>PLACEHOLDER: replace with images from news pdf</p>
 </div>

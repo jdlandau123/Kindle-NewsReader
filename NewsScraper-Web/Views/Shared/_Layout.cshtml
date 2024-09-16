@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"]</title>
+    <title>Kindle NewsReader - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/NewsScraper_Web.styles.css" asp-append-version="true"/>
@@ -15,6 +15,10 @@
         body {
             font-family: "Noticia Text", serif;
             letter-spacing: 0.08rem;
+            background-color: rgb(245, 242, 232);
+        }
+        
+        footer {
             background-color: rgb(245, 242, 232);
         }
     </style>
@@ -50,7 +54,7 @@
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
+<footer class="border-top footer text-muted fixed-bottom p-2">
     <div class="container">
         &copy; @DateTime.Today.Year.ToString() - Kindle NewsReader - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>

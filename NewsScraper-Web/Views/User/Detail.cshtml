@@ -1,9 +1,21 @@
 @model NewsScraper_Web.Models.User
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Account Settings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    .text-input {
+        width: 50%;
+    }
+    
+    @@media (max-width: 767px) {
+        .text-input {
+            width: 100%;
+        }
+    }
+</style>
 
 <div>
     <div class="d-flex justify-content-between align-items-center">
@@ -13,56 +25,97 @@
         </button>
     </div>
     <hr/>
-    <p class="text-primary">@TempData["Message"]</p>
-    <form asp-action="Detail">
+    <form asp-action="Detail" class="d-flex w-100 align-items-center flex-column">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Settings.Id" />
-        <div class="form-group w-50">
+        <div class="form-group text-input">
             <label asp-for="Settings.KindleEmail" class="control-label">Kindle Email Address</label>
             <input asp-for="Settings.KindleEmail" class="form-control" />
             <span asp-validation-for="Settings.KindleEmail" class="text-danger"></span>
         </div>
         <p class="fw-bold mt-2">Select News Categories</p>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeWorld" /> World
-            </label>
+        <div class="d-flex w-75 justify-content-around">
+            <div class="d-flex flex-column gap-2">
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeWorld" /> World
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeUs" /> US
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludePolitics" /> Politics
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeBusiness" /> Business
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeSports" /> Sports
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeEntertainment" /> Entertainment
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Settings.IncludeScience" /> Science
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeUs" /> US
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludePolitics" /> Politics
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeBusiness" /> Business
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeSports" /> Sports
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeEntertainment" /> Entertainment
-            </label>
-        </div>
-        <div class="form-group form-check">
-            <label class="form-check-label">
-                <input class="form-check-input" asp-for="Settings.IncludeScience" /> Science
-            </label>
-        </div>
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeWorld" /> World *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeUs" /> US *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludePolitics" /> Politics *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeBusiness" /> Business *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeSports" /> Sports *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeEntertainment" /> Entertainment *@
+        @*     </label> *@
+        @* </div> *@
+        @* <div class="form-group form-check"> *@
+        @*     <label class="form-check-label"> *@
+        @*         <input class="form-check-input" asp-for="Settings.IncludeScience" /> Science *@
+        @*     </label> *@
+        @* </div> *@
         <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary mt-2" />
+            <input type="submit" value="Save" class="btn btn-primary mt-5" />
         </div>
     </form>
-    <div class="mt-5">
+    <p class="mt-2 text-center" style="color: green;">@TempData["Message"]</p>
+    <div class="mt-5 text-end">
         <a asp-controller="User" asp-action="Delete" class="text-danger">Delete Account</a>
     </div>
 </div>

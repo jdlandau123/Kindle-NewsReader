@@ -107,10 +107,10 @@ namespace NewsScraper_Web.Controllers
                 Settings = new Settings()
             };
 
-            await _userService.Login(user);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            await _userService.Login(user);
+            return RedirectToAction("Detail", "User");
         }
         
         // GET: User/Login

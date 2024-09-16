@@ -3,6 +3,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Help</h1>
-</div>
+<style>
+    #findDevicesImg {
+        width: 50%;
+    }
+
+    @@media (max-width: 767px) {
+        #findDevicesImg {
+            width: 100%;
+        }
+    }
+</style>
+
+<h1>How To Find Your Kindle's Email Address</h1>
+
+<ol>
+    <li>Sign in to <a href="https://amazon.com" target="_blank">Amazon</a></li>
+    <li>Hover over "Account & Lists" and select "Devices"</li>
+    <img id="findDevicesImg" class="p-2" src="~/images/find-devices.png" alt="Find Devices" />
+    <li>Click on your Kindle</li>
+    <li>Find the "Email" field in your device's summary</li>
+    <img class="w-100 p-2" src="~/images/kindle-summary.png" alt="Device Summary" />
+</ol>

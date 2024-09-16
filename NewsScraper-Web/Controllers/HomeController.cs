@@ -18,6 +18,10 @@ public class HomeController : Controller
     {
         bool isLoggedIn = _userService.IsLoggedIn();
         ViewData["IsLoggedIn"] = isLoggedIn;
+        // if (isLoggedIn)
+        // {
+        //     return RedirectToAction("Detail", "User");
+        // }
         return View();
     }
 
