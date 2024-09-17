@@ -20,7 +20,7 @@ public class Newspaper : IDocument
     {
         container.Page(page =>
         {
-            page.Margin(25);
+            page.Margin(15);
             page.Header().Element(ComposeHeader);
             page.Content().Element(ComposeContent);
         });
@@ -28,7 +28,7 @@ public class Newspaper : IDocument
     
     void ComposeHeader(IContainer container)
     {
-        var titleStyle = TextStyle.Default.FontSize(18).SemiBold().FontColor(Colors.Black);
+        var titleStyle = TextStyle.Default.FontSize(28).SemiBold().FontColor(Colors.Black);
     
         container.Row(row =>
         {
@@ -46,7 +46,7 @@ public class Newspaper : IDocument
     void ComposeContent(IContainer container)
     {
         container
-            .PaddingVertical(40)
+            .PaddingTop(40)
             .AlignCenter()
             .Column(column =>
             {
@@ -55,15 +55,15 @@ public class Newspaper : IDocument
                 {
                     column.Item().Text(text =>
                     {
-                        text.Span(article.Title).FontSize(14).LineHeight(1.5f);
+                        text.Span(article.Title).FontSize(24).LineHeight(1.5f).SemiBold();
                         text.EmptyLine();
-                        text.Span(article.Category).FontSize(10).LineHeight(1.5f);
+                        text.Span(article.Category).FontSize(20).LineHeight(1.5f);
                         text.EmptyLine();
                         text.Span($"Last updated: {article.UpdatedDate.ToString("d")}")
-                            .FontSize(10).LineHeight(1.5f);
+                            .FontSize(20).LineHeight(1.5f);
                         text.EmptyLine();
                         text.EmptyLine();
-                        text.Span(article.Body).FontSize(10).LineHeight(1.5f);
+                        text.Span(article.Body).FontSize(20).LineHeight(1.5f);
                     });
                     column.Item().PaddingHorizontal(10).LineHorizontal(1).LineColor(Colors.Grey.Medium);
                 }
