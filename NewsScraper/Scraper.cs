@@ -1,5 +1,5 @@
-using AngleSharp.Dom;
 using AngleSharp;
+using AngleSharp.Dom;
 
 namespace NewsScraper;
 

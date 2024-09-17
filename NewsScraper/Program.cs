@@ -1,15 +1,19 @@
 ﻿using System.Text;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Data.Sqlite;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
+using sib_api_v3_sdk.Api;
+using sib_api_v3_sdk.Client;
+using sib_api_v3_sdk.Model;
 
 namespace NewsScraper;
 
 class Program
 {
-    public static async Task Main(string[] args)
+    public static IConfiguration Config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+    public static async System.Threading.Tasks.Task Main(string[] args)
     {
         var timer = System.Diagnostics.Stopwatch.StartNew();
         
@@ -27,12 +31,10 @@ class Program
         WriteArticlesToJson(scraper.Articles);
         
         // get user settings from database
-        IConfiguration config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-        string dbPath = config["DB_PATH"];
+        string dbPath = Config["DB_PATH"];
         if (string.IsNullOrEmpty(dbPath))
         {
-            Console.WriteLine("Database path not configured");
-            return;
+            throw new Exception("Database path not configured");
         }
         List<Settings> settings = GetSettingsList(dbPath);
         Console.WriteLine($"User configs found: {settings.Count}");
@@ -47,6 +49,7 @@ class Program
             string filepath = 
                 $"newspapers/KindleNewsReader_{setting.Username}_{DateTime.Today.ToString("yyyyMMdd")}.pdf";
             newspaper.GeneratePdf(filepath);
+            SendEmail(setting.KindleEmail, filepath);
         }
         
         timer.Stop(); 
@@ -94,5 +97,34 @@ class Program
         }
         
         return settings;
+    }
+
+    public static void SendEmail(string email, string pdfPath)
+    {
+        string apiKey = Config["SMTP_API_KEY"];
+        if (apiKey == null)
+        {
+            Console.WriteLine("SMTP server not configured");
+            return;
+        }
+
+        Configuration.Default.ApiKey.Add("api-key", apiKey);
+        var emailService = new TransactionalEmailsApi();
+        SendSmtpEmailSender sender = new SendSmtpEmailSender("Kindle NewsReader", "kindlenewsreader@noreply.com");
+        SendSmtpEmailTo toEmail = new SendSmtpEmailTo(email);
+        List<SendSmtpEmailTo> to = [ toEmail ];
+        string textContent = "Here's your daily news digest from Kindle NewsReader";
+        string subject = $"Kindle NewsReader {DateTime.Today.ToString("d")}";
+        byte[] content = File.ReadAllBytes(pdfPath);
+        string attachmentName = pdfPath.Split("/").Last();
+        SendSmtpEmailAttachment attachmentContent = new SendSmtpEmailAttachment(null, content, attachmentName);
+        List<SendSmtpEmailAttachment> attachment = [ attachmentContent ];
+        SendSmtpEmail mail = new();
+        mail.Sender = sender;
+        mail.To = to;
+        mail.TextContent = textContent;
+        mail.Subject = subject;
+        mail.Attachment = attachment;
+        emailService.SendTransacEmail(mail);
     }
 }
