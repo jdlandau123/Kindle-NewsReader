@@ -18,13 +18,12 @@ public class Newspaper : IDocument
 
     public void Compose(IDocumentContainer container)
     {
-        container
-            .Page(page =>
-            {
-                page.Margin(25);
-                page.Header().Element(ComposeHeader);
-                page.Content().Element(ComposeContent);
-            });
+        container.Page(page =>
+        {
+            page.Margin(25);
+            page.Header().Element(ComposeHeader);
+            page.Content().Element(ComposeContent);
+        });
     }
     
     void ComposeHeader(IContainer container)

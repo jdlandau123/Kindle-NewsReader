@@ -12,22 +12,19 @@ class Program
     public static async Task Main(string[] args)
     {
         var timer = System.Diagnostics.Stopwatch.StartNew();
-        Directory.CreateDirectory("articles");
         
         // scrape articles
         Scraper scraper = new Scraper();
         List<string> links = await scraper.GetArticleLinks();
-        Console.WriteLine($"{links.Count} links found");
+        Console.WriteLine($"Article links found: {links.Count}");
         foreach (string link in links)
         {
-            Console.WriteLine(link);
             await scraper.ScrapeArticle(link);
         }
         Console.WriteLine($"Articles scraped: {scraper.Articles.Count}");
         
-        string outFilename = $"articles-{DateTime.Today.ToString("yyyyMMdd")}.json";
-        string json = JsonConvert.SerializeObject(scraper.Articles);
-        File.WriteAllText(Path.Join("articles", outFilename), json, Encoding.UTF8);
+        // write to json file - REMOVE?
+        WriteArticlesToJson(scraper.Articles);
         
         // get user settings from database
         IConfiguration config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
@@ -38,19 +35,30 @@ class Program
             return;
         }
         List<Settings> settings = GetSettingsList(dbPath);
-        Console.WriteLine($"{settings.Count} user settings found");
+        Console.WriteLine($"User configs found: {settings.Count}");
         
         // generate newspapers
         Directory.CreateDirectory("newspapers");
-        QuestPDF.Settings.License = LicenseType.Community;
+        QuestPDF.Settings.License = LicenseType.Community; 
         foreach (Settings setting in settings)
         {
-            var newspaper = new Newspaper(scraper.Articles);
-            newspaper.GeneratePdf("newspapers/test.pdf");
+            List<Article> articles = setting.GetFilteredArticles(scraper.Articles);
+            Newspaper newspaper = new Newspaper(articles);
+            string filepath = 
+                $"newspapers/KindleNewsReader_{setting.Username}_{DateTime.Today.ToString("yyyyMMdd")}.pdf";
+            newspaper.GeneratePdf(filepath);
         }
         
         timer.Stop(); 
         Console.WriteLine($"Execution time: {timer.Elapsed}");
+    }
+
+    public static void WriteArticlesToJson(List<Article> articles)
+    {
+        Directory.CreateDirectory("articles");
+        string outFilename = $"articles-{DateTime.Today.ToString("yyyyMMdd")}.json";
+        string json = JsonConvert.SerializeObject(articles);
+        File.WriteAllText(Path.Join("articles", outFilename), json, Encoding.UTF8);
     }
 
     public static List<Settings> GetSettingsList(string dbPath)
@@ -60,27 +68,31 @@ class Program
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Settings";
+            command.CommandText = @"SELECT KindleEmail, IncludeWorld, IncludeUs, IncludePolitics, IncludeBusiness, 
+                                            IncludeSports, IncludeEntertainment, IncludeScience, Users.Username 
+                                    FROM Settings INNER JOIN Users ON Settings.UserId = Users.Id
+                                    WHERE KindleEmail IS NOT NULL";
             using (SqliteDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
                     Settings s = new Settings
                     {
-                        KindleEmail = reader.GetString(2),
-                        IncludeWorld = reader.GetBoolean(3),
-                        IncludeUs = reader.GetBoolean(4),
-                        IncludePolitics = reader.GetBoolean(5),
-                        IncludeBusiness = reader.GetBoolean(6),
-                        IncludeSports = reader.GetBoolean(7),
-                        IncludeEntertainment = reader.GetBoolean(8),
-                        IncludeScience = reader.GetBoolean(9)
+                        KindleEmail = reader.GetString(0),
+                        IncludeWorld = reader.GetBoolean(1),
+                        IncludeUs = reader.GetBoolean(2),
+                        IncludePolitics = reader.GetBoolean(3),
+                        IncludeBusiness = reader.GetBoolean(4),
+                        IncludeSports = reader.GetBoolean(5),
+                        IncludeEntertainment = reader.GetBoolean(6),
+                        IncludeScience = reader.GetBoolean(7),
+                        Username = reader.GetString(8)
                     };
                     settings.Add(s);
                 }
             }
         }
-
+        
         return settings;
     }
 }
