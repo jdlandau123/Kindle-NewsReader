@@ -12,7 +12,7 @@ public class Scraper
     private IBrowsingContext _browsingContext { get; } =
         BrowsingContext.New(Configuration.Default.WithDefaultLoader());
 
-    private readonly int _maxArticles = 50;
+    private readonly int _maxArticles = 5;
     
     public async Task<List<string>> GetArticleLinks()
     {

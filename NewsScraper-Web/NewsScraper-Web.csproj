@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>NewsScraper_Web</RootNamespace>
+        <UserSecretsId>181227af-70cf-49e1-9056-371eb615b9ab</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

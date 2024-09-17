@@ -23,6 +23,7 @@ public class Program
 
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<UserService>();
+        
         builder.Services.AddHttpContextAccessor();
         
         builder.Services.AddDistributedMemoryCache();
