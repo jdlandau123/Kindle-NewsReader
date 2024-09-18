@@ -23,6 +23,7 @@
         <div class="form-group mt-2">
             <input type="submit" value="Login" class="btn btn-primary" />
         </div>
+        <p class="mt-2 text-danger">@TempData["Error"]</p>
     </form>
     <a asp-controller="User" asp-action="Register" class="mt-2">Need an account? Click here to register</a>
 </div>

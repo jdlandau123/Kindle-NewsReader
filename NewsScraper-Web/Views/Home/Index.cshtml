@@ -3,6 +3,22 @@
     bool isLoggedIn = (bool)ViewData["IsLoggedIn"];
 }
 
+<style>
+    #kindleImg, #categoriesImg {
+        width: 100%;
+    }
+    
+    #categoriesImg {
+        border: 1pt solid black;
+    }
+
+    @@media (max-width: 767px) {
+        #kindleImg, #categoriesImg {
+            width: 100%;
+        }
+    }
+</style>
+
 <div class="text-center">
     <h1 class="display-4">A Custom Newspaper Delivered To Your Kindle Every Morning</h1>
     @if (!isLoggedIn)
@@ -19,5 +35,18 @@
     <p class="mt-5">
         Kindle NewsReader is completely free to use and no personal information is required to sign up
     </p>
-    <p>PLACEHOLDER: replace with images from news pdf</p>
+    <div class="d-flex flex-column flex-lg-row align-items-center align-items-lg-start
+                w-100 gap-4 justify-content-around mt-5">
+        <div class="d-flex flex-column align-items-center w-100">
+            <label for="kindleImg">Get daily news delivered straight to your Kindle</label>
+            <img id="kindleImg" src="~/images/kindle-news.jpg" alt="Kindle Newspaper"/>
+            @* <label for="kindleImg">Get daily news delivered straight to your Kindle</label> *@
+        </div>
+        <div class="d-flex flex-column align-items-center">
+            <label for="categoriesImg">Select the categories you want to read</label>
+            <img id="categoriesImg" src="~/images/categories.png" alt="Categories"/>
+            @* <label for="categoriesImg">Select the categories you want to read</label> *@
+        </div>
+        
+    </div>
 </div>

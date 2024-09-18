@@ -1,0 +1,40 @@
+﻿@model NewsScraper_Web.Models.Contact
+
+@{
+    ViewData["Title"] = "About";
+    bool isLoggedIn = (bool)ViewData["IsLoggedIn"];
+}
+<h1>About</h1>
+
+<p>
+    All news is sourced from <a href="https://apnews.com/" target="_blank">Associated Press</a>, which allows
+    non-commercial use of their content as per Section 7 of their 
+    <a href="https://apnews.com/termsofservice" target="_blank">Terms of Service</a>.
+</p>
+
+<p>
+    Kindle NewsReader is a private application that does not collect any personal information from its
+    users. 
+</p>
+
+@if (isLoggedIn)
+{
+    <h4 class="mt-5">Contact the Developer</h4>
+    <form asp-action="About">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email (optional)</label>
+            <input asp-for="Email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Message" class="control-label"></label>
+            <textarea asp-for="Message" class="form-control"></textarea>
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="submit" value="Send" class="btn btn-primary mt-2"/>
+        </div>
+    </form>
+    <p class="mt-2" style="color: green;">@TempData["Message"]</p>
+}

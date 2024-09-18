@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -89,12 +88,14 @@ namespace NewsScraper_Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Form is invalid");
+                TempData["Error"] = "Form is invalid";
+                return View(userRegister);
             }
 
             if (userRegister.Password != userRegister.ConfirmPassword)
             {
-                return BadRequest("Passwords do not match");
+                TempData["Error"] = "Passwords don't match";
+                return View(userRegister);
             }
 
             var (hash, salt) = _passwordService.HashPassword(userRegister.Password);
@@ -125,14 +126,16 @@ namespace NewsScraper_Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Form is invalid");
+                TempData["Error"] = "Form is invalid";
+                return View(login);
             }
             
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == login.Username);
             if (user == null || !_passwordService.VerifyPasswordHash(
                     login.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return Unauthorized("Username or password is incorrect");
+                TempData["Error"] = "Username or password is incorrect";
+                return View(login);
             }
             
             await _userService.Login(user);
