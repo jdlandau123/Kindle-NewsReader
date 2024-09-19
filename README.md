@@ -1,8 +1,8 @@
 # Kindle NewsReader
 
-An open source web application that scrapes news articles 
-from Associated Press, formats them into a newspaper-like 
-pdf file, and automatically delivers them to registered 
+A web application that scrapes news articles from 
+Associated Press, formats them into newspaper-like 
+pdf files, and automatically delivers them to registered 
 Kindle devices every morning.
 
 Associated Press allows non-commercial use of their 
