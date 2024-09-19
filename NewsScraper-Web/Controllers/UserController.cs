@@ -98,6 +98,15 @@ namespace NewsScraper_Web.Controllers
                 return View(userRegister);
             }
 
+            User?existingUser = _context.Users
+                .FirstOrDefault(u => u.Username.ToLower() == userRegister.Username.ToLower());
+
+            if (existingUser != null)
+            {
+                TempData["Error"] = "Username is already taken";
+                return View(userRegister);
+            }
+
             var (hash, salt) = _passwordService.HashPassword(userRegister.Password);
             
             User user = new User
@@ -130,7 +139,8 @@ namespace NewsScraper_Web.Controllers
                 return View(login);
             }
             
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == login.Username);
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.Username.ToLower() == login.Username.ToLower());
             if (user == null || !_passwordService.VerifyPasswordHash(
                     login.Password, user.PasswordHash, user.PasswordSalt))
             {
