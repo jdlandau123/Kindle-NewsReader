@@ -36,11 +36,6 @@ public class Program
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });
-        
-        builder.Services.Configure<ForwardedHeadersOptions>(options =>
-        {
-            options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
-        });
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
@@ -60,11 +55,6 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-        
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
 
         app.UseAuthentication();
         app.UseAuthorization();
