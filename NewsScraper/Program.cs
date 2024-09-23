@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Data.Sqlite;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -28,7 +26,7 @@ class Program
         Console.WriteLine($"Articles scraped: {scraper.Articles.Count}");
         
         // write to json file - REMOVE?
-        WriteArticlesToJson(scraper.Articles);
+        // WriteArticlesToJson(scraper.Articles);
         
         // get user settings from database
         string dbPath = Config["DB_PATH"];
@@ -52,17 +50,17 @@ class Program
             SendEmail(setting.KindleEmail, filepath);
         }
         
-        timer.Stop(); 
+        timer.Stop();
         Console.WriteLine($"Execution time: {timer.Elapsed}");
     }
 
-    public static void WriteArticlesToJson(List<Article> articles)
-    {
-        Directory.CreateDirectory("articles");
-        string outFilename = $"articles-{DateTime.Today.ToString("yyyyMMdd")}.json";
-        string json = JsonConvert.SerializeObject(articles);
-        File.WriteAllText(Path.Join("articles", outFilename), json, Encoding.UTF8);
-    }
+    // public static void WriteArticlesToJson(List<Article> articles)
+    // {
+    //     Directory.CreateDirectory("articles");
+    //     string outFilename = $"articles-{DateTime.Today.ToString("yyyyMMdd")}.json";
+    //     string json = JsonConvert.SerializeObject(articles);
+    //     File.WriteAllText(Path.Join("articles", outFilename), json, Encoding.UTF8);
+    // }
 
     public static List<Settings> GetSettingsList(string dbPath)
     {
