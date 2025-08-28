@@ -47,7 +47,7 @@ class Program
             string filepath = 
                 $"newspapers/KindleNewsReader_{setting.Username}_{DateTime.Today.ToString("yyyyMMdd")}.pdf";
             newspaper.GeneratePdf(filepath);
-            // SendEmail(setting.KindleEmail, filepath);
+            SendEmail(setting.KindleEmail, filepath);
         }
         
         timer.Stop();
