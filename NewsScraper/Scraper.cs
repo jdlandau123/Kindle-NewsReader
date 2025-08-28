@@ -39,17 +39,18 @@ public class Scraper
             .Select(p => p.TextContent.Trim());
         string title = document.QuerySelector("h1.Page-headline").TextContent.Trim();
         string category = document.QuerySelector("div.Page-breadcrumbs > a").TextContent.Trim();
-        string timestamp = document.QuerySelector("div.Page-dateModified>bsp-timestamp")
-            .GetAttribute("data-timestamp");
-        DateTime date = TimestampToDateTime(timestamp);
+        IElement? timestamp = document.QuerySelector("div.Page-dateModified>bsp-timestamp");
         Article article = new()
         {
             Title = title,
             Category = category,
-            UpdatedDate = date,
             Link = url,
             Body = String.Join(" ", paragraphs)
         };
+        if (timestamp != null)
+        {
+            article.UpdatedDate = TimestampToDateTime(timestamp.GetAttribute("data-timestamp"));
+        }
         if (article.IsValid())
         {
             Articles.Add(article);
